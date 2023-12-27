@@ -31,7 +31,7 @@ public final class BlueMapStructures extends JavaPlugin {
 
 	@Override
 	public void onDisable() {
-		getLogger().info("BlueMapSignExtractor disabled");
+		getLogger().info("BlueMapStructures disabled");
 		BlueMapAPI.unregisterListener(onEnableListener);
 	}
 }

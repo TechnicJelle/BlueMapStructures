@@ -31,7 +31,7 @@ public class Core {
 			}
 		}
 
-		logger.info("Finished loading signs into markers");
+		logger.info("Finished loading structures into markers");
 	}
 
 	private static void processMCA(Logger logger, BlueMapMap map, Path regionFile) {

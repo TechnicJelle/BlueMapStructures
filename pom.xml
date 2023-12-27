@@ -35,11 +35,11 @@
 					<relocations>
 						<relocation>
 							<pattern>com.google</pattern>
-							<shadedPattern>com.technicjelle.bluemapsignextractor.shadow</shadedPattern>
+							<shadedPattern>com.technicjelle.bluemapstructures.shadow</shadedPattern>
 						</relocation>
 						<relocation>
 							<pattern>org.bstats</pattern>
-							<shadedPattern>com.technicjelle.bluemapsignextractor.shadow</shadedPattern>
+							<shadedPattern>com.technicjelle.bluemapstructures.shadow</shadedPattern>
 						</relocation>
 					</relocations>
 				</configuration>
