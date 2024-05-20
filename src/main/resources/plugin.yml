@@ -2,3 +2,5 @@ name: BlueMapStructures
 version: '${project.version}'
 main: com.technicjelle.bluemapstructures.BlueMapStructures
 api-version: '1.13'
+depend:
+  - BlueMap
