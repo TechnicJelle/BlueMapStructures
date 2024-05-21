@@ -76,8 +76,11 @@ public class MCA {
 
 				byte[] keyBytes = ByteUtils.longToBytes(reference);
 
-				int x = ByteUtils.bytesToInt(Arrays.copyOfRange(keyBytes, 0, Integer.BYTES));
-				int z = ByteUtils.bytesToInt(Arrays.copyOfRange(keyBytes, Integer.BYTES, Long.BYTES));
+				//Each 64-bit number of this array represents a chunk coordinate (i.e. block coordinate / 16),
+				// with its X packed into the low (least significant) 32 bits and Z packed into the high (most significant) 32 bits.
+				// https://minecraft.wiki/w/Chunk_format
+				int z = ByteUtils.bytesToInt(Arrays.copyOfRange(keyBytes, 0, Integer.BYTES));
+				int x = ByteUtils.bytesToInt(Arrays.copyOfRange(keyBytes, Integer.BYTES, Long.BYTES));
 
 				Vector2i chunkPos = new Vector2i(x, z);
 				structureReferencesMap.computeIfAbsent(chunkPos, k -> new HashSet<>()).add(structureReference.getKey());
