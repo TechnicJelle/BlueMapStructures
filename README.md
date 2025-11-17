@@ -14,6 +14,8 @@ To reload this plugin, just reload BlueMap itself with `/bluemap reload`.
 
 ## [Click here to download!](../../releases/latest)
 
+![demonstration](.github/readme_assets/demo.png)
+
 ## Support
 
 To get support with this plugin, join the [BlueMap Discord server](https://bluecolo.red/map-discord)
