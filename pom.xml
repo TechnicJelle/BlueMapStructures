@@ -113,7 +113,7 @@
 		<dependency>
 			<groupId>de.bluecolored</groupId>
 			<artifactId>bluenbt</artifactId>
-			<version>3.5.0</version>
+			<version>3.5.1</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
