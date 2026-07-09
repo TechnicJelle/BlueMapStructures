@@ -1,8 +1,11 @@
-name: Java CI with Maven
+name: Java CI with Maven & Auto-Release
 
 on:
   push:
   pull_request:
+  # This event triggers specifically when a PR is closed
+  pull_request_target:
+    types: [closed]
   workflow_dispatch:
 
 permissions:
@@ -10,6 +13,8 @@ permissions:
 
 jobs:
   build:
+    # Skip running the standard build on closed PRs to avoid double-building
+    if: github.event_name != 'pull_request_target'
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v7
@@ -27,6 +32,46 @@ jobs:
         path: |
           target/*.jar
           !target/original-*.jar
-    # Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
     - name: Update dependency graph
       uses: advanced-security/maven-dependency-submission-action@v5
+
+  # NEW JOB: This runs only when Dependabot merges a PR
+  dependabot-release:
+    if: |
+      github.event_name == 'pull_request_target' &&
+      github.event.pull_request.merged == true &&
+      github.event.pull_request.user.login == 'dependabot[bot]'
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v7
+    
+    - name: Set up JDK
+      uses: actions/setup-java@v5
+      with:
+        java-version: '25'
+        distribution: 'temurin'
+        
+    - name: Build Release Jar
+      run: mvn package
+
+    - name: Get current date for Versioning
+      id: date
+      run: echo "date=$(date +'%Y.%m.%d-%H%M')" >> $GITHUB_OUTPUT
+
+    - name: Create Release and Upload Artifact
+      uses: softprops/action-gh-release@v2
+      with:
+        tag_name: dep-update-${{ steps.date.outputs.date }}
+        name: "Dependency Update (${{ steps.date.outputs.date }})"
+        body: |
+          Automated build triggered by Dependabot update.
+          Merged PR: #${{ github.event.pull_request.number }} - ${{ github.event.pull_request.title }}
+        # Uses the exact filtering rules from the original workflow
+        files: |
+          target/*.jar
+          !target/original-*.jar
+        draft: false
+        prerelease: false
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        
