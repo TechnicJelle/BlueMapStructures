@@ -3,7 +3,6 @@ name: Java CI with Maven & Auto-Release
 on:
   push:
   pull_request:
-  # This event triggers specifically when a PR is closed
   pull_request_target:
     types: [closed]
   workflow_dispatch:
@@ -13,7 +12,6 @@ permissions:
 
 jobs:
   build:
-    # Skip running the standard build on closed PRs to avoid double-building
     if: github.event_name != 'pull_request_target'
     runs-on: ubuntu-latest
     steps:
@@ -32,10 +30,7 @@ jobs:
         path: |
           target/*.jar
           !target/original-*.jar
-    - name: Update dependency graph
-      uses: advanced-security/maven-dependency-submission-action@v5
 
-  # NEW JOB: This runs only when Dependabot merges a PR
   dependabot-release:
     if: |
       github.event_name == 'pull_request_target' &&
@@ -66,7 +61,6 @@ jobs:
         body: |
           Automated build triggered by Dependabot update.
           Merged PR: #${{ github.event.pull_request.number }} - ${{ github.event.pull_request.title }}
-        # Uses the exact filtering rules from the original workflow
         files: |
           target/*.jar
           !target/original-*.jar
